@@ -92,11 +92,29 @@ InitPortF
 	LDR R1, =GPIO_PORTF_DEN_R
 	STR R0, [R1]
 	
+main
+	; Nothing needs to be initialized here
+	; because it will run through all of InitPortF first
 
 loop  
-
-       B    loop
-
+	;Read the switch and test if the switch is pressed
+	LDR R1, =GPIO_PORTF_DATA_R ; Load the address of Port F data into R1 so we can use it
+	LDR R0, [R1] ; Load the value at R1 (the port data) into R0
+	LSR R0, #4 ; Shift the port data to the right 4 bits since we only need pin 4
+	CBZ R0, toggleLED ; If the value at R0 is 0, we want to toggle the LED
+	; If we didn't branch off on the previous instruction,
+	; then all we want to do is toggle off the LED and then
+	; restart the loop
+	MOV R0, #0x00 
+	LDR R1, =GPIO_PORTF_DATA_R
+	; This will move 0x00 into the Port F data register
+	; which will turn off the LED
+	STR R0, [R1]
+	; go to the beginning of the loop
+    B loop
+toggleLED ; Toggles the LED
+	; Read our current Port F data because
+	; we need to check if the LED is on or not
 
        ALIGN      ; make sure the end of this section is aligned
        END        ; end of file
