@@ -2,9 +2,9 @@
 ; main.s
 ; Author: Quinn Kleinfelter
 ; Date Created: 09/24/2020
-; Last Modified: 09/24/2020
+; Last Modified: 09/25/2020
 ; Section Number: 003
-; Instructor: Suba Sah
+; Instructor: Devinder Kaur / Suba Sah
 ; Lab number: 4
 ;   Brief description of the program
 ; The overall objective of this system is an interactive alarm
@@ -140,6 +140,18 @@ turnOnLED ; Turns the LED on, no matter what state it is in currently
 	; and begin our loop again
 	B loop
 
+delay100MS ; Subroutine that will delay our code by roughly 100ms
+	; To delay the running by about 100ms we need to put
+	; a large number into a register and slowly reduce it
+	; so that we take up 100ms worth of cycles
+	; the large number we've chosen is #0x6270F
+	MOV R12, #0x26F1
+	MOVT R12, #0x6
+delay
+	SUB R12, R12, #0x01 ; Subtract the current value of R12 by 1 and put it into R12
+	CBNZ R12, delay ; Compare R12 to 0 and if it is not 0, go back to delay
+	BX LR ; Go back to the line after
+	
        ALIGN      ; make sure the end of this section is aligned
        END        ; end of file
        
