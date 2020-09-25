@@ -79,7 +79,7 @@ InitPortF
 	
 	; GPIO_PORTF_AFSEL_R = 0x00
 	MOV R0, #0x00
-	LDR R1, =GPIO_PORT_AFSEL_DIR_R
+	LDR R1, =GPIO_PORTF_AFSEL_R
 	STR R0, [R1]
 	
 	; GPIO_PORTF_PUR_R = 0x10
@@ -145,11 +145,11 @@ delay100MS ; Subroutine that will delay our code by roughly 100ms
 	; a large number into a register and slowly reduce it
 	; so that we take up 100ms worth of cycles
 	; the large number we've chosen is #0x6270F
-	MOV R12, #0x26F1
-	MOVT R12, #0x6
+	MOV R7, #0x26F1
+	MOVT R7, #0x6
 delay
-	SUB R12, R12, #0x01 ; Subtract the current value of R12 by 1 and put it into R12
-	CBNZ R12, delay ; Compare R12 to 0 and if it is not 0, go back to delay
+	SUBS R7, R7, #0x01 ; Subtract the current value of R12 by 1 and put it into R12
+	BNE delay ; Compare R12 to 0 and if it is not 0, go back to delay
 	BX LR ; Go back to the line after
 	
        ALIGN      ; make sure the end of this section is aligned
