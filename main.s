@@ -112,9 +112,33 @@ loop
 	STR R0, [R1]
 	; go to the beginning of the loop
     B loop
+	
 toggleLED ; Toggles the LED
 	; Read our current Port F data because
 	; we need to check if the LED is on or not
+	LDR R1, =GPIO_PORTF_DATA_R ; Load the address of the Port F data into R1 so we can use it
+	LDR R0, [R1] ; Load the value at R1 (the port data) into R0
+	LSR R0, #3 ; Shift the port data to the right 3 bits since we only need pin 3 here
+	CBZ R0, turnOnLED ; if this value is 0, then that means our LED is currently off and we need to turn it on
+	; Otherwise, just turn off the LED
+	MOV R0, #0x00
+	LDR R1, =GPIO_PORTF_DATA_R
+	; This will move 0x00 into the Port F data register
+	; which will turn off the LED
+	STR R0, [R1]
+	; Then we need to delay by 100ms
+	BL delay100MS
+	; And begin our loop again
+	B loop
+	
+turnOnLED ; Turns the LED on, no matter what state it is in currently
+	MOV R0, #0x08
+	LDR R1, =GPIO_PORTF_DATA_R
+	STR R0, [R1]
+	; Again, we need to delay 100ms
+	BL delay100MS
+	; and begin our loop again
+	B loop
 
        ALIGN      ; make sure the end of this section is aligned
        END        ; end of file
