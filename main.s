@@ -144,9 +144,9 @@ delay100MS ; Subroutine that will delay our code by roughly 100ms
 	; To delay the running by about 100ms we need to put
 	; a large number into a register and slowly reduce it
 	; so that we take up 100ms worth of cycles
-	; the large number we've chosen is #0x6270F
+	; the large number we've chosen is #0x726F1
 	MOV R7, #0x26F1
-	MOVT R7, #0x6
+	MOVT R7, #0x7
 delay
 	SUBS R7, R7, #0x01 ; Subtract the current value of R12 by 1 and put it into R12
 	BNE delay ; Compare R12 to 0 and if it is not 0, go back to delay
